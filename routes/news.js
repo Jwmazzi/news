@@ -4,14 +4,21 @@ var dateformat = require('dateformat');
 
 // PG Connection Values
 require('dotenv').config();
-
 const { Client } = require('pg');
 const client = new Client();
 client.connect();
 
-const the_sql = `
+// TODO - Replace This With Call for the Follwing
+/* 
+select tablename from pg_catalog.pg_tables
+where left(tablename, 4) = 'geom'
+order by tablename asc limit 1
+*/
+let today   = new Date();
+let yesterday = today.setDate(today.getDate() - 2);
+let the_sql = `
                 select distinct sourceurl, goldsteinscale::float, numarticles::integer 
-                from geom_${dateformat(Date.now(), 'yyyymmdd')}
+                from geom_${dateformat( yesterday, 'yyyymmdd')}
                 where left(eventcode, 2) in ('14') and numarticles::integer >= 25
                 order by goldsteinscale::float asc, numarticles::integer desc 
                 limit 5;
