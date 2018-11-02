@@ -1,19 +1,12 @@
-<div class="row">
-
-    <div class="col">
-        <h1>{{ title }}</h1>
-    </div>
-
-    <div class="col-10">
+<div>
+    <div class="row news-header"><h1>{{ title }}</h1></div>
+    <div class="row news-block">
         <ul class="list-group">
             {{#each stories}}
-                <li class="list-group-item border-0">
-                    <a href="{{this.sourceurl}}" target="blank">
+                    <a class="news-link" href="{{this.sourceurl}}" target="blank">
                         {{this.sourceurl}}<span class="badge badge-primary badge-pill">{{this.numarticles}}</span>
                     </a>
-                </li>
             {{/each}}
         </ul>
     </div>
-    
 </div>

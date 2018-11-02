@@ -12,3 +12,22 @@ html, body {
 .badge {
   margin-left: 10px;
 }
+
+
+/* .row {
+    border: 1px black solid;
+} */
+
+.news-header {
+    margin-bottom: 25px;
+}
+
+.news-link {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.news-block {
+    overflow-y: auto;
+    max-height: 300px;
+}

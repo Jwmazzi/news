@@ -24,7 +24,7 @@ router.get('/', (rte_req, rte_res, next) => {
 
         } else {
 
-          rte_res.render('news', {title: 'GDELT News', stories: res.rows});
+          rte_res.render('news', {title: 'GDELT - Protest Headlines', stories: res.rows});
 
         }
 
