@@ -1,5 +1,19 @@
 <div>
-    <div class="row news-header"><h1>{{ title }}</h1></div>
+
+    <div class="row nav nav-block">
+
+        <li class="nav-item">
+            <a class="nav-link" href="?category=protest">Protest</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="?category=fight">Fight</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="?category=assault">Assault</a>
+        </li>
+
+    </div>
+
     <div class="row news-block">
         <ul class="list-group">
             {{#each stories}}
@@ -9,4 +23,5 @@
             {{/each}}
         </ul>
     </div>
+
 </div>

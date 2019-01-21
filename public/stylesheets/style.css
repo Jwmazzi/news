@@ -9,17 +9,16 @@ html, body {
     align-items: center;
 }
 
-.badge {
-  margin-left: 10px;
+.nav-link {
+    padding: 0 1rem 0 0 !important;
 }
 
+.nav-block {
+    margin-bottom: 50px !important;
+}
 
-/* .row {
-    border: 1px black solid;
-} */
-
-.news-header {
-    margin-bottom: 25px;
+.badge {
+  margin-left: 10px;
 }
 
 .news-link {
