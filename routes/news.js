@@ -10,15 +10,17 @@ router.get('/', (rte_req, rte_res) => {
   // Parse Incoming Query Parameters
   var the_params = url.parse(rte_req.url, true).query;
 
-  // Set Cameo Code
+  // Set Cameo Type & Code
   if (Object.keys(the_params).length == 0) {
+    var cameo_type = 'Protest';
     var cameo_code = 14;
   } else {
     var cameo_code = cameo[the_params.category];
+    var cameo_type = the_params.category;
   }
 
   // Collect Current Table
-  utils.query(sql.latest, null, function(err, res) {
+  utils.query(sql.a, null, function(err, res) {
 
     if (err) {
       
@@ -31,7 +33,7 @@ router.get('/', (rte_req, rte_res) => {
 
       // Replace SQL Values
       // TODO - Leverage PG Module to Handle This Problem
-      var the_sql = sql.base.replace('$1', the_tbl);
+      var the_sql = sql.b.replace('$1', the_tbl);
       var the_sql = the_sql.replace('$2', cameo_code);
 
       // Collect Target Values
@@ -43,7 +45,7 @@ router.get('/', (rte_req, rte_res) => {
 
         } else {
 
-          rte_res.render('news', {title: `${the_params.category} Headlines`.toUpperCase(), stories: res.rows});
+          rte_res.render('news', {title: `${cameo_type} Headlines`.toUpperCase(), stories: res.rows});
 
         }
 

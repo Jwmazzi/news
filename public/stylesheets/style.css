@@ -9,24 +9,11 @@ html, body {
     align-items: center;
 }
 
-.nav-link {
-    padding: 0 1rem 0 0 !important;
-}
-
-.nav-block {
-    margin-bottom: 50px !important;
-}
-
-.badge {
-  margin-left: 10px;
-}
-
-.news-link {
-    margin-top: 5px;
-    margin-bottom: 5px;
+.navbar-brand {
+    color: white !important;
 }
 
 .news-block {
     overflow-y: auto;
-    max-height: 300px;
+    max-height: 75%;
 }
