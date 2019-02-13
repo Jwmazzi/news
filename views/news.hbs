@@ -1,38 +1,61 @@
 <div class="nav-block">
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
     <span class="navbar-brand" href="#"><img src="/images/news.png" width="30" height="30" alt=""></span>
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" href="?category=protest">Protest</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="?category=fight">Fight</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="?category=assault">Assault</a>
-        </li>
-    </ul>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="?category=protest">Protest</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?category=fight">Fight</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?category=assault">Assault</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?category=comment">Comment</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?category=cooperate">Cooperate</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?category=consult">Consult</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?category=aid">Aid</a>
+            </li>
+        </ul>
+    </div>
 </div>
 
-<div class="table-responsive news-block">
-    <table class="table table-bordered table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th>URL</th>
-                <th>Actor One</th>
-                <th>Actor Two</th>
-                <th>Sentiment</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each stories}}
-            <tr>
-                <td><a href="{{this.source}}" target="blank">{{this.short}}</a></td>
-                <td>{{this.name_one}}</td>
-                <td>{{this.name_two}}</td>
-                <td>{{this.avgtone}}</td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
+<div class="row">
+
+    <div class="col-4" id="map"></div>
+
+    <div class="col-8 table-responsive news-block" id="info">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Top Ten Stories</th>
+                    <th>Actor One</th>
+                    <th>Actor Two</th>
+                    <th>Sentiment</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each stories}}
+                <tr>
+                    <td><a href="{{this.source}}" target="blank">{{this.title}}</a></td>
+                    <td>{{this.name_one}}</td>
+                    <td>{{this.name_two}}</td>
+                    <td>{{this.avgtone}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
 </div>

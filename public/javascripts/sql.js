@@ -9,14 +9,22 @@ module.exports = {
 
     b:`
             select distinct 
+            left(title, 50) as title,
             sourceurl as source, 
-            left(sourceurl, 50) || ' . . .' as short,
             actor1name as name_one,
             actor2name as name_two,
             round(avgtone::numeric, 2) as avgtone 
             from $1
             where left(eventcode, 2) in ('$2') and numarticles::integer >= 25 and actor2name != ''
             order by avgtone asc
+            limit 10;
+            `
+        ,
+    
+    c:`
+            select st_asgeojson(geom) as geo
+            from $1
+            where left(eventcode, 2) in ('$2')
             limit 50;
             `
 

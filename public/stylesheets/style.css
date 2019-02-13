@@ -1,19 +1,14 @@
 html, body {
-    height: 100%;
+    padding-top: 60px;
+    padding-bottom: 40px;
+    padding-left: 10px;
+    height: 480px;
 }
 
-.container {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#map {
+    border: 1px black solid;
 }
 
-.navbar-brand {
-    color: white !important;
-}
-
-.news-block {
+#info {
     overflow-y: auto;
-    max-height: 75%;
 }
