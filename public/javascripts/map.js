@@ -1,12 +1,15 @@
-var map = L.map('map');
-
 function fetch_events(e) {
 
     var page = new URL(window.location.href);
 
     var type = page.search.split('=')[1];
 
-    var path = `${page.origin}/features?category=${type}`;
+    // Set Default on First Load
+    if (!type) {
+        var path = `${page.origin}/features?category=protest`;
+    } else {
+        var path = `${page.origin}/features?category=${type}`;
+    }
 
     fetch(path).then(response => {
 
@@ -14,20 +17,71 @@ function fetch_events(e) {
 
     }).then(data => {
 
-        // TODO - Inject Properties into Marker Pop Up
-        var features = data.map(feature => JSON.parse(feature.geo));
+        L.geoJSON(data, {
 
-        L.geoJSON(features).addTo(map);
+            onEachFeature: function(feat, layer) {
+
+                layer.bindPopup(`
+                    <strong>Event ID: ${feat.properties.globaleventid}</strong><br/>
+                    <strong>Event Code: ${feat.properties.eventcode}</strong><br/>
+                    <hr style="dotted 1px;" />
+
+                    Actor 1: ${feat.properties.actor1name} <br/>
+                    Actor 2: ${feat.properties.actor2name} <br/>
+                    <hr style="dotted 1px;" />
+
+                    Average Tone: ${feat.properties.avgtone} <br/>
+                    Goldstein Scale: ${feat.properties.goldsteinscale} <br/>
+                    <hr style="dotted 1px;" />
+
+                    <a href="${feat.properties.sourceurl}" target="_blank">Go to the Article</a> <br/>
+                `);
+            }
+
+        }).addTo(map);
 
     });
 
 }
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+var grayscale = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 	maxZoom: 19
-}).addTo(map);
+});
+
+var imagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+});
+
+var baseMaps = {
+    "Grayscale": grayscale,
+    "Imagery": imagery
+};
+
+var map = L.map('map', {layers: [grayscale]});
+
+L.control.layers(baseMaps).addTo(map);
 
 map.on('load', fetch_events);
 
 map.setView([20, -20], 2);
+
+
+// Build Map Interaction with Table
+document.querySelectorAll('#top-ten-table a').forEach(e => e.addEventListener("mouseover", function() {
+
+    map.eachLayer(function(layer) {
+
+        if (layer.feature) {
+
+            if (layer.feature.id == e.id) {
+                console.log('Found. Update Symbology and Extent');
+            } 
+
+        }
+
+    });
+
+    console.log('Fetch Record & Add It');
+
+}));

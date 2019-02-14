@@ -11,6 +11,13 @@ router.get('/', (rte_req, rte_res) => {
     var the_params = url.parse(rte_req.url, true).query;
     var cameo_code = cameo[the_params.category];
 
+    // Set Cameo Type & Code
+    if (Object.keys(the_params).length == 0) {
+        var cameo_code = '14';
+    } else {
+        var cameo_code = cameo[the_params.category];
+    }
+
     // Collect Current Table
     utils.query(sql.a, null, function(err, res) {
 
@@ -37,7 +44,9 @@ router.get('/', (rte_req, rte_res) => {
 
                 } else {
 
-                    rte_res.send(res.rows);
+                    var geojson_collection = res.rows[0].jsonb_build_object;
+
+                    rte_res.send(geojson_collection);
 
                 }
 

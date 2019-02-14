@@ -9,23 +9,32 @@ module.exports = {
 
     b:`
             select distinct 
-            left(title, 50) as title,
+            globaleventid,
+            left(title, 75) as title,
             sourceurl as source, 
             actor1name as name_one,
             actor2name as name_two,
-            round(avgtone::numeric, 2) as avgtone 
+            round(avgtone::numeric, 2) as avgtone,
+            goldsteinscale as goldstein
             from $1
             where left(eventcode, 2) in ('$2') and numarticles::integer >= 25 and actor2name != ''
             order by avgtone asc
             limit 10;
             `
         ,
-    
-    c:`
-            select st_asgeojson(geom) as geo
-            from $1
-            where left(eventcode, 2) in ('$2')
-            limit 50;
-            `
 
+    c:`
+            SELECT jsonb_build_object(
+                'type',     'FeatureCollection',
+                'features', jsonb_agg(feature)
+            )
+            FROM (
+            SELECT jsonb_build_object(
+                'type',       'Feature',
+                'id',         globaleventid,
+                'geometry',   ST_AsGeoJSON(geom)::jsonb,
+                'properties', to_jsonb(row) - 'geom'
+            ) AS feature
+            FROM (SELECT * FROM $1 where left(eventcode, 2) in ('$2') limit 200) row) features;
+           `
 }

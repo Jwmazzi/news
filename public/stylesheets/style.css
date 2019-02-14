@@ -1,14 +1,8 @@
 html, body {
-    padding-top: 60px;
-    padding-bottom: 40px;
-    padding-left: 10px;
-    height: 480px;
+    padding-top: 80px;
 }
 
 #map {
-    border: 1px black solid;
-}
-
-#info {
-    overflow-y: auto;
+    height: 100%;
+    border: 1px gray solid;
 }
