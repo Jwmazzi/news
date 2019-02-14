@@ -1,8 +1,19 @@
-html, body {
-    padding-top: 80px;
-}
-
 #map {
     height: 100%;
     border: 1px gray solid;
+}
+
+#center {
+    background: #232227;
+    margin: 0px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+}
+
+.row {
+    padding-top: 80px
 }
