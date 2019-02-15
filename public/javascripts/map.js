@@ -1,17 +1,23 @@
-function fetch_events(e) {
+function get_route_path(url, route) {
 
-    var page = new URL(window.location.href);
+    var page = new URL(url);
 
     var type = page.search.split('=')[1];
 
     // Set Default on First Load
     if (!type) {
-        var path = `${page.origin}/features?category=protest`;
+        var path = `${page.origin}/${route}?category=protest`;
     } else {
-        var path = `${page.origin}/features?category=${type}`;
+        var path = `${page.origin}/${route}?category=${type}`;
     }
 
-    fetch(path).then(response => {
+    return path;
+
+}
+
+function fetch_events(e) {
+
+    fetch(get_route_path(window.location.href, 'features')).then(response => {
 
         return response.json();
 
@@ -66,7 +72,6 @@ map.on('load', fetch_events);
 
 map.setView([20, -20], 2);
 
-
 // Build Map Interaction with Table
 document.querySelectorAll('#top-ten-table a').forEach(e => e.addEventListener("mouseover", function() {
 
@@ -75,13 +80,25 @@ document.querySelectorAll('#top-ten-table a').forEach(e => e.addEventListener("m
         if (layer.feature) {
 
             if (layer.feature.id == e.id) {
+
                 console.log('Found. Update Symbology and Extent');
+
             } 
 
         }
 
     });
 
-    console.log('Fetch Record & Add It');
-
 }));
+
+// Build Search Functionality
+function basic_search(e) {
+
+    var input_targets = document.getElementsByClassName("form-control");
+    var input_values = Array.prototype.slice.call(input_targets).map(input => input.value);
+
+    console.log(input_values);
+
+    fetch(get_route_path(window.location.href, 'news'));
+
+}

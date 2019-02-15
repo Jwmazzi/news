@@ -19,7 +19,7 @@ router.get('/', (rte_req, rte_res) => {
     var cameo_type = the_params.category;
   }
 
-  // Collect Current Table
+  // Query Current Table & Return Appropriate Template
   utils.query(sql.a, null, function(err, res) {
 
     if (err) {
@@ -28,27 +28,45 @@ router.get('/', (rte_req, rte_res) => {
 
     } else {
 
-      // Collect Table Name from Response
+      // Collect Name of Daily GDELT Table
       var the_tbl = res.rows[0].tablename;
 
-      // Replace SQL Values
-      // TODO - Leverage PG Module to Handle This Problem
-      var the_sql = sql.b.replace('$1', the_tbl);
-      var the_sql = the_sql.replace('$2', cameo_code);
+      // Query for Target IDs
+      var id_sql = sql.d.replace('$1', the_tbl);
+      var id_sql = id_sql.replace('$2', cameo_code);
 
-      // Collect Target Values
-      utils.query(the_sql, null, function(err, res) {
+      utils.query(id_sql, null, function(err, res) {
 
         if (err) {
 
-          rte_res.render('error', {title: 'SQL Query Failed', error: err.stack});
-
-        } else {
-
-          rte_res.render('news', {title: `${cameo_type} Headlines`.toUpperCase(), stories: res.rows});
+          rte_res.render('error', {title: 'SQL Query Failed', error: `${err.stack.slice(0, 120)} . . .`});
 
         }
 
+        // Unpack Global Ids to Array
+        var id_array = res.rows.map(row => row.globaleventid);
+
+        // Format SQL to Fetch Based on IDs
+        var table_sql = sql.e.replace('$1', the_tbl);
+        var table_sql = table_sql.replace('$2', id_array);
+
+        // Collect Target Values for Building Table
+        utils.query(table_sql, null, function(err, res) {
+
+          if (err) {
+
+            rte_res.render('error', {title: 'SQL Query Failed', error: `${err.stack.slice(0, 120)} . . .`});
+
+          } 
+
+          rte_res.render('news', {
+            title: `${cameo_type} Headlines`.toUpperCase(), 
+            stories: res.rows, 
+            cam_type: cameo_type[0].toUpperCase() + cameo_type.slice(1)
+          });
+
+        });
+        
       });
 
     }

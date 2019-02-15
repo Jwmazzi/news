@@ -1,64 +1,86 @@
-<div class="container-fluid">
-    <div class="nav-block">
-        <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-        <span class="navbar-brand" href="#"><img src="/images/news.png" width="30" height="30" alt=""></span>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <span class="navbar-brand" href="#"><img src="/images/news.png" width="30" height="30" alt=""></span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="?category=protest">Protest</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="?category=fight">Fight</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="?category=assault">Assault</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="?category=comment">Comment</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="?category=cooperate">Cooperate</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="?category=consult">Consult</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="?category=aid">Aid</a>
-                </li>
-            </ul>
-        </div>
-        <form class="form-inline my-2 my-lg-0" onsubmit="country_runner()">
-        <input class="form-control mr-sm-2" type="search" placeholder="Country Search . . ." aria-label="Search">
-        </form>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="?category=protest">Protest</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?category=fight">Fight</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?category=assault">Assault</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?category=comment">Comment</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?category=cooperate">Cooperate</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?category=consult">Consult</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?category=aid">Aid</a>
+            </li>
+        </ul>
+        <span class="navbar-text"><a href="/">Insights for ArcGIS</a></span> 
     </div>
-    <div class="row">
+</nav>
+<div class="container-fluid">
+    <div class="row main-row">
         <div class="col-4"><div id="map"></div></div>
-        <div class="col-8 table-responsive news-block" id="info">
-            <table id="top-ten-table" class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Top Ten Stories</th>
-                        <th>Actor One</th>
-                        <th>Actor Two</th>
-                        <th>Goldstein</th>
-                        <th>Sentiment</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each stories}}
-                    <tr>
-                        <td><a href="{{this.source}}" target="blank" id='{{this.globaleventid}}'>{{this.title}}</a></td>
-                        <td>{{this.name_one}}</td>
-                        <td>{{this.name_two}}</td>
-                        <td>{{this.goldstein}}</td>
-                        <td>{{this.avgtone}}</td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-12">
+                    <form class="form-inline" onsubmit="basic_search()">
+                        <div class="input-group mb-2 mr-sm-2">
+                            <div class="input-group-prepend"><div class="input-group-text">Event ID</div></div>
+                            <input type="text" class="form-control" id="inlineFormInputGroupUsername2">
+                        </div>
+
+                        <div class="input-group mb-2 mr-sm-2">
+                            <div class="input-group-prepend"><div class="input-group-text">Country</div></div>
+                            <input type="text" class="form-control" id="inlineFormInputGroupUsername2">
+                        </div>
+                        <div class="input-group mb-2 mr-sm-2">
+                            <div class="input-group-prepend"><div class="input-group-text">Actor</div></div>
+                            <input type="text" class="form-control" id="inlineFormInputGroupUsername2">
+                        </div>
+
+                        <button type="submit" onsubmit="basic_search()" class="btn btn-dark mb-2">Submit</button>
+                    </form>
+                </div>
+            </div> 
+            <div id="top-ten" class="row">
+                <div class="table-responsive news-block col-12" id="info">
+                    <table id="top-ten-table" class="table table-bordered table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Top {{cam_type}} Stories</th>
+                                <th>Actor One</th>
+                                <th>Actor Two</th>
+                                <th>Goldstein</th>
+                                <th>Sentiment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each stories}}
+                            <tr>
+                                <td><a href="{{this.source}}" target="blank" id='{{this.globaleventid}}'>{{this.title}}</a></td>
+                                <td>{{this.name_one}}</td>
+                                <td>{{this.name_two}}</td>
+                                <td>{{this.goldstein}}</td>
+                                <td>{{this.avgtone}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
+    </div>  
 </div>
