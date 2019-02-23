@@ -7,6 +7,7 @@ var url        = require('url');
 
 router.get('/', (rte_req, rte_res) => {
 
+
   // Parse Incoming Query Parameters
   var the_params = url.parse(rte_req.url, true).query;
 
@@ -31,9 +32,19 @@ router.get('/', (rte_req, rte_res) => {
       // Collect Name of Daily GDELT Table
       var the_tbl = res.rows[0].tablename;
 
-      // Query for Target IDs
-      var id_sql = sql.d.replace('$1', the_tbl);
-      var id_sql = id_sql.replace('$2', cameo_code);
+      if (the_params.country) {
+
+        var id_sql = sql.d_1.replace('$1', the_tbl);
+        var id_sql = id_sql.replace('$2', cameo_code);
+        var id_sql = id_sql.replace('$3', the_params.country.toUpperCase());
+        
+      } else {
+
+        // Query for Target IDs
+        var id_sql = sql.d.replace('$1', the_tbl);
+        var id_sql = id_sql.replace('$2', cameo_code);
+
+      }
 
       utils.query(id_sql, null, function(err, res) {
 
@@ -60,6 +71,7 @@ router.get('/', (rte_req, rte_res) => {
           } 
 
           rte_res.render('news', {
+            date: the_tbl,
             title: `${cameo_type} Headlines`.toUpperCase(), 
             stories: res.rows, 
             cam_type: cameo_type[0].toUpperCase() + cameo_type.slice(1)

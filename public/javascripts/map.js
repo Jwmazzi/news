@@ -40,7 +40,11 @@ function fetch_events(e) {
                     Goldstein Scale: ${feat.properties.goldsteinscale} <br/>
                     <hr style="dotted 1px;" />
 
-                    <a href="${feat.properties.sourceurl}" target="_blank">Go to the Article</a> <br/>
+                    Keywords: ${feat.properties.keywords} <br/>
+                    <hr style="dotted 1px;" />
+
+                    ${feat.properties.summary} <br/>
+                    <br/><a href="${feat.properties.sourceurl}" target="_blank">Go to the Article</a> <br/>
                 `);
             }
 
@@ -72,18 +76,44 @@ map.on('load', fetch_events);
 
 map.setView([20, -20], 2);
 
-// Build Map Interaction with Table
+L.control.navbar().addTo(map);
+
+// Table Mouseover
 document.querySelectorAll('#top-ten-table a').forEach(e => e.addEventListener("mouseover", function() {
 
     map.eachLayer(function(layer) {
 
         if (layer.feature) {
 
-            if (layer.feature.id == e.id) {
+            if (layer.feature.id == e.dataset.globalid) {
 
-                console.log('Found. Update Symbology and Extent');
+                map.setView(
+                    [layer.feature.geometry.coordinates[1], layer.feature.geometry.coordinates[0]],
+                    6
+                );
 
-            } 
+                layer.openPopup();
+
+            }
+
+        }
+
+    });
+
+}));
+
+// Table Mouseout
+document.querySelectorAll('#top-ten-table a').forEach(e => e.addEventListener("mouseout", function() {
+
+    map.eachLayer(function(layer) {
+
+        if (layer.feature) {
+
+            if (layer.feature.id == e.dataset.globalid) {
+
+                // map.closePopup();
+
+            }
 
         }
 
@@ -95,10 +125,43 @@ document.querySelectorAll('#top-ten-table a').forEach(e => e.addEventListener("m
 function basic_search(e) {
 
     var input_targets = document.getElementsByClassName("form-control");
-    var input_values = Array.prototype.slice.call(input_targets).map(input => input.value);
+    var country_value = Array.prototype.slice.call(input_targets).map(input => input.value);
 
-    console.log(input_values);
+    var news_url = new URL(get_route_path(window.location.href, 'news'));
 
-    fetch(get_route_path(window.location.href, 'news'));
+    var params = new URLSearchParams(news_url.search);
+    params.append('country', country_value);
+
+    news_url.search = params;
+
+    window.open(news_url.href, "_self");
+
+}
+
+function export_shapefile() {
+
+    var id_array = Array.prototype.slice.call(document.querySelectorAll('#globaleventid')).map(el => el.dataset.globalid);
+    var the_date = Array.prototype.slice.call(document.querySelectorAll('.navbar-brand')).map(tr => tr.dataset.date)[0];
+    var the_page = new URL(window.location.href).origin;
+
+    fetch(`${the_page}/export`, {
+        
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+        body: JSON.stringify({ids: id_array, table: the_date})
+        
+    }).then(response => {
+
+        return response.json();
+
+
+    }).then(data => {
+
+        window.open(`${the_page}/${data.zip_path}`);
+
+    });
 
 }

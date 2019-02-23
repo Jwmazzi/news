@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <span class="navbar-brand" href="#"><img src="/images/news.png" width="30" height="30" alt=""></span>
+    <span class="navbar-brand" data-date="{{this.date}}"><a href="?category=protest"><img src="/images/news.png" width="30" height="30" alt=""></a></span>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -27,7 +27,16 @@
                 <a class="nav-link" href="?category=aid">Aid</a>
             </li>
         </ul>
-        <span class="navbar-text"><a href="/">Insights for ArcGIS</a></span> 
+    </div>
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Insights for ArcGIS</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="export_shapefile()" href="#">Export Shapefile</a>
+            </li>
+        </ul>
     </div>
 </nav>
 <div class="container-fluid">
@@ -36,23 +45,14 @@
         <div class="col-8">
             <div class="row">
                 <div class="col-12">
-                    <form class="form-inline" onsubmit="basic_search()">
-                        <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend"><div class="input-group-text">Event ID</div></div>
-                            <input type="text" class="form-control" id="inlineFormInputGroupUsername2">
+                    <div class="input-group mb-2 mr-sm-2">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-secondary" onclick="basic_search()" type="button">Filter</button>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Input a Country . . ." aria-label="" aria-describedby="basic-addon1">
                         </div>
-
-                        <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend"><div class="input-group-text">Country</div></div>
-                            <input type="text" class="form-control" id="inlineFormInputGroupUsername2">
-                        </div>
-                        <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend"><div class="input-group-text">Actor</div></div>
-                            <input type="text" class="form-control" id="inlineFormInputGroupUsername2">
-                        </div>
-
-                        <button type="submit" onsubmit="basic_search()" class="btn btn-dark mb-2">Submit</button>
-                    </form>
+                    </div>
                 </div>
             </div> 
             <div id="top-ten" class="row">
@@ -60,7 +60,8 @@
                     <table id="top-ten-table" class="table table-bordered table-striped">
                         <thead class="thead-dark">
                             <tr>
-                                <th>Top {{cam_type}} Stories</th>
+                                <th>Event ID</th>
+                                <th>Source</th>
                                 <th>Actor One</th>
                                 <th>Actor Two</th>
                                 <th>Goldstein</th>
@@ -70,7 +71,8 @@
                         <tbody>
                             {{#each stories}}
                             <tr>
-                                <td><a href="{{this.source}}" target="blank" id='{{this.globaleventid}}'>{{this.title}}</a></td>
+                                <td><a id="globaleventid" href="{{this.source}}" data-globalid="{{this.globaleventid}}" target="blank">{{this.globaleventid}}</a></td>
+                                <td>{{this.site}}</td>
                                 <td>{{this.name_one}}</td>
                                 <td>{{this.name_two}}</td>
                                 <td>{{this.goldstein}}</td>
