@@ -38,18 +38,6 @@ router.post('/', (rte_req, rte_res) => {
         `C:\\"Program Files"\\PostgreSQL\\10\\bin\\pgsql2shp.exe -f ${shp_path} -h localhost -u postgres -P postgres gdelt "${feature_sql};"`,
         {shell: true}
     );
-    // cp.spawn(
-    //     `
-    //     C:\\"Program Files"\\PostgreSQL\\10\\bin\\pgsql2shp.exe 
-    //     -f ${shp_path} 
-    //     -h ${config.PGHOST} 
-    //     -u ${config.PGUSER} 
-    //     -P ${config.PGPASSWORD} 
-    //     ${config.PGDATABASE} 
-    //     "${feature_sql};"
-    //     `,
-    //     {shell: true}
-    // );
 
     // Create Archive File
     var output = fs.createWriteStream(zip_path);

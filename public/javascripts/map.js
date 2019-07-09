@@ -102,25 +102,6 @@ document.querySelectorAll('#top-ten-table a').forEach(e => e.addEventListener("m
 
 }));
 
-// Table Mouseout
-document.querySelectorAll('#top-ten-table a').forEach(e => e.addEventListener("mouseout", function() {
-
-    map.eachLayer(function(layer) {
-
-        if (layer.feature) {
-
-            if (layer.feature.id == e.dataset.globalid) {
-
-                // map.closePopup();
-
-            }
-
-        }
-
-    });
-
-}));
-
 // Build Search Functionality
 function basic_search(e) {
 

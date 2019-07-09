@@ -7,7 +7,6 @@ var url        = require('url');
 
 router.get('/', (rte_req, rte_res) => {
 
-
   // Parse Incoming Query Parameters
   var the_params = url.parse(rte_req.url, true).query;
 
@@ -41,7 +40,7 @@ router.get('/', (rte_req, rte_res) => {
       } else {
 
         // Query for Target IDs
-        var id_sql = sql.d.replace('$1', the_tbl);
+        var id_sql = sql.d_1.replace(/\$1/g, the_tbl);
         var id_sql = id_sql.replace('$2', cameo_code);
 
       }
@@ -70,12 +69,27 @@ router.get('/', (rte_req, rte_res) => {
 
           } 
 
-          rte_res.render('news', {
-            date: the_tbl,
-            title: `${cameo_type} Headlines`.toUpperCase(), 
-            stories: res.rows, 
-            cam_type: cameo_type[0].toUpperCase() + cameo_type.slice(1)
-          });
+          if (rte_req.user) {
+
+            rte_res.render('news', {
+              date: the_tbl,
+              title: `${cameo_type} Headlines`.toUpperCase(),
+              user: rte_req.user._json.name,
+              stories: res.rows, 
+              cam_type: cameo_type[0].toUpperCase() + cameo_type.slice(1)
+            });
+
+          } else {
+
+            rte_res.render('news', {
+              date: the_tbl,
+              title: `${cameo_type} Headlines`.toUpperCase(),
+              user: 'Guest', 
+              stories: res.rows, 
+              cam_type: cameo_type[0].toUpperCase() + cameo_type.slice(1)
+            });
+
+          }
 
         });
         

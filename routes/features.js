@@ -31,7 +31,7 @@ router.get('/', (rte_req, rte_res) => {
             var the_tbl = res.rows[0].tablename;
 
             // Query for Target IDs
-            var id_sql = sql.d.replace('$1', the_tbl);
+            var id_sql = sql.d_1.replace('$1', the_tbl);
             var id_sql = id_sql.replace('$2', cameo_code);
 
             // Collect Target Values

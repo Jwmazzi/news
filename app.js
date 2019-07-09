@@ -1,15 +1,49 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
+// General
+var createError  = require('http-errors');
+var express      = require('express');
+var path         = require('path');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var logger       = require('morgan');
+var passport     = require('passport');
+var Strategy     = require('passport-twitter').Strategy;
+var config       = require('dotenv').config();
 
-var indexRouter = require('./routes/index');
-var newsRouter = require('./routes/news');
+// Routes
+var indexRouter   = require('./routes/index');
+var newsRouter    = require('./routes/news');
 var featureRouter = require('./routes/features');
-var exportRouter = require('./routes/export');
+var exportRouter  = require('./routes/export');
 
 var app = express();
+
+app.use(require('express-session')({ secret: 'runner', resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new Strategy({
+  consumerKey: config.parsed.TWITTER_CONSUMER_KEY,
+  consumerSecret: config.parsed.TWITTER_CONSUMER_SECRET,
+  callbackURL: '/twitter/return'
+},
+function(token, tokenSecret, profile, cb) {
+  return cb(null, profile);
+}));
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
+});
+
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
+});
+
+app.get('/twitter/login', passport.authenticate('twitter'))
+
+app.get('/twitter/return', passport.authenticate('twitter', {
+  failureRedirect: '/'
+}), function(req, res) {
+  res.redirect('/news')
+})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

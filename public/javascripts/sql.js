@@ -10,10 +10,14 @@ module.exports = {
     d:`
            select globaleventid
            from $1
+           where sourceurl in
+           (
+           select distinct(sourceurl)
+           from $1
            where left(eventcode, 2) in ('$2')
            and numarticles::integer >= 25 and actor2name != ''
-           order by summary asc, avgtone desc
-           limit 500;
+           limit 500
+           )
            `
         ,
 
@@ -21,7 +25,7 @@ module.exports = {
           select globaleventid
           from $1
           where left(eventcode, 2) in ('$2')
-          and upper(actor1name) = '$3' and actor2name != ''
+          and actor2name != ''
           order by summary asc, avgtone desc
           limit 500;
           `
